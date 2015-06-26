@@ -11,6 +11,8 @@
 #include "MickesLedControl.h"
 #include "TemperatureDisplay.h"
 
+
+
 /*
  * HusetEnhet.ino
  *
@@ -39,7 +41,6 @@
 #define REQUEST_TIMEOUT 5000
 
 //Skapa de globala objekten
-MickeDebug mDebug(100);
 
 RS485WithErrChk rs485 = RS485WithErrChk(RS485_SERIAL_RX_PIN,RS485_SERIAL_TX_PIN,RS485_SERIAL_CTRL_PIN);
 SendReciveRemoteTemp sendRecvRTemp(&rs485,NUM_OF_REMOTE_SENSORS,REQUEST_TIMEOUT);
@@ -76,13 +77,12 @@ void loop()
 	
 	boolean b;
 	b = sendRecvRTemp.sendRemoteRequest(0);
-	mDebug.serialDebugLine("Send request",b);
-	
+	Serial.println("Sending request...");
+
+
 	String sTemp;
 	sTemp = sendRecvRTemp.checkForRemoteData();
-	mDebug.serialDebugLine("check Remotedata",sTemp);
-	
-	
+	Serial.println("Checking for remote data..");
 	
 	sjoTemp = sendRecvRTemp.getRemoteTemperature(0);
 	bastuTemp = sendRecvRTemp.getRemoteTemperature(1);
@@ -92,7 +92,15 @@ void loop()
 	midDisplay.showTemperature(bastuTemp);
 	leftDisplay.showTemperature(uteTemp);
 	
-	mDebug.serialDebugLine("Sjo Temp",sjoTemp);
-	mDebug.serialDebugLine("Bastu Temp",bastuTemp);
-	mDebug.serialDebugLine("Ute Temp",uteTemp);
+	Serial.print("Sjö Temperatur = ");
+	Serial.println(sjoTemp);
+
+	Serial.print("Bastu Temperatur = ");
+	Serial.println(bastuTemp);
+
+	Serial.print("Ute Temperatur = ");
+	Serial.println(uteTemp);
+
+	delay(200);
+
 }
